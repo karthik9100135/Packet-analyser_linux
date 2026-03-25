@@ -1,40 +1,25 @@
-#pragma once
-#include <cstdint>
+#include <thread>
+#include <vector>
+#include "queue.hpp"
 
-struct EthernetHeader {
-    uint8_t dest[6];
-    uint8_t src[6];
-    uint16_t type;
-};
+BoundedQueue<std::vector<uint8_t>> packet_queue(1000);
 
-struct IPv4Header {
-    uint8_t version_ihl;
-    uint8_t tos;
-    uint16_t total_length;
-    uint16_t id;
-    uint16_t frag_offset;
-    uint8_t ttl;
-    uint8_t protocol;
-    uint16_t checksum;
-    uint32_t src_ip;
-    uint32_t dst_ip;
-};
+void start_capture(const char* dev);
+void parse_packet(const uint8_t* packet, size_t len);
 
-struct TCPHeader {
-    uint16_t src_port;
-    uint16_t dst_port;
-    uint32_t seq;
-    uint32_t ack;
-    uint8_t data_offset;
-    uint8_t flags;
-    uint16_t window;
-    uint16_t checksum;
-    uint16_t urgent;
-};
+void consumer() {
+    while (true) {
+        auto pkt = packet_queue.pop();
+        parse_packet(pkt.data(), pkt.size());
+    }
+}
 
-struct UDPHeader {
-    uint16_t src_port;
-    uint16_t dst_port;
-    uint16_t len;
-    uint16_t checksum;
-};
+int main() {
+    std::thread producer(start_capture, "eth0");
+    std::thread consumer_thread(consumer);
+
+    producer.join();
+    consumer_thread.join();
+
+    return 0;
+}
