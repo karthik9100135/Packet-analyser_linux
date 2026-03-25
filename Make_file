@@ -1,0 +1,5 @@
+CXX=g++
+CXXFLAGS=-std=c++17 -pthread
+
+all:
+	$(CXX) main.cpp capture.cpp parser.cpp -lpcap -o analyzer
