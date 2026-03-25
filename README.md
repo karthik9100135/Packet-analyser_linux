@@ -51,3 +51,17 @@ NIC → Kernel Buffer → Producer Thread → Bounded Queue → Consumer Thread 
 ### Install dependencies
 ```bash
 sudo apt-get install libpcap-dev
+
+## 🤝 Contributing
+
+Contributions are welcome!
+
+- Fork the repository
+- Create a new branch (`feature/your-feature`)
+- Commit your changes
+- Open a pull request
+
+Please ensure your code:
+- Follows clean C++ practices
+- Includes basic validation
+- Does not break existing functionality
