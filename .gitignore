@@ -1,0 +1,15 @@
+# Build
+analyzer
+*.o
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# VSCode
+.vscode/
+
+# temp
+*.tmp
