@@ -1,5 +1,6 @@
 #include <thread>
 #include <vector>
+#include <iostream>
 #include "queue.hpp"
 
 BoundedQueue<std::vector<uint8_t>> packet_queue(1000);
@@ -14,8 +15,13 @@ void consumer() {
     }
 }
 
-int main() {
-    std::thread producer(start_capture, "eth0");
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        std::cout << "Usage: ./analyzer <interface>\n";
+        return 1;
+    }
+
+    std::thread producer(start_capture, argv[1]);
     std::thread consumer_thread(consumer);
 
     producer.join();
